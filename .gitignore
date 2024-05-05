@@ -1,0 +1,5 @@
+.DS_Store
+bin
+obj
+Backend/_db.sqlite3
+Dyndata
