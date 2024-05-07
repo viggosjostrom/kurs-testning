@@ -8,25 +8,29 @@ public static class Utils
 
     public static Arr CreateMockUsers()
     {
-        var read = File.ReadAllText(Path.Combine("json","mock-users.json"));
+        // Read all mock users from the JSON file
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
-        Arr sucessfullyWrittenUsers = Arr();
-        foreach(var user in mockUsers)
+        Arr successFullyWrittenUsers = Arr();
+        foreach (var user in mockUsers)
         {
             user.password = "12345678";
             var result = SQLQueryOne(
-                @"INSERT INTO users(firstName, lastName, email, password)
+                @"INSERT INTO users(firstName,lastName,email,password)
                 VALUES($firstName, $lastName, $email, $password)
             ", user);
-            // If we get an error from the DB then we havent added the mock users, if not we have to add to the sucessfull list
-            if(!result.HasKey("error"))
+            // If we get an error from the DB then we haven't added
+            // the mock users, if not we have so add to the successful list
+            if (!result.HasKey("error"))
             {
-                user.Delete("password"); //The specification says reutrn the user list without password
-                sucessfullyWrittenUsers.Push(user);
+                // The specification says return the user list without password
+                user.Delete("password");
+                successFullyWrittenUsers.Push(user);
             }
         }
-        return sucessfullyWrittenUsers;
+        return successFullyWrittenUsers;
     }
+    
 
     public static bool IsPasswordGoodEnough(string passowrd)
     {
@@ -35,5 +39,20 @@ public static class Utils
         Regex regex = new Regex(pattern);
 
         return regex.IsMatch(passowrd);
+    }
+
+    
+    public static Arr RemoveBadWords(string text, string replacement)
+    {
+
+        var badWordsJson = File.ReadAllText(Path.Combine("json", "bad-words.json"));
+        Arr badWords = JSON.Parse(badWordsJson);
+
+        foreach (var word in badWords)
+        {
+            var regex = new Regex($@"\b{Regex.Escape(word)}\b", RegexOptions.IgnoreCase);
+            text = regex.Replace(text, replacement);
+        }
+        return Arr(text);
     }
 }

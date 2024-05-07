@@ -1,57 +1,64 @@
 namespace WebApp;
 
 using Microsoft.AspNetCore.Components.Web;
-using Xunit;
 using Xunit.Sdk;
 using System.Text.RegularExpressions;
 
-public class UtilsTest
+
+public class UtilsTest(Xlog output)
 {
+// The following lines are needed to get 
+    // output to the Console to work in xUnit tests!
+    // (also needs the using Xunit.Abstractions)
+    // Note: You need to use the following command line command 
+    // dotnet test --logger "console;verbosity=detailed"
+    // for the logging to work
+  
     [Fact]
+    // A simple initial example
     public void TestSumInt()
     {
         Assert.Equal(12, Utils.SumInts(7, 5));
         Assert.Equal(-3, Utils.SumInts(6, -9));
     }
 
-    // NOTE: To see console.writelines / Log and to get the path correct
-    // Start Git Bash terminal (standalone). Navigate to backend folder, do "dotnet test".
-  /*  [Fact]
+    [Fact]
     public void TestCreateMockUsers()
     {
-    //Read all mockusers from the JSON file
-       var read = File.ReadAllText(Path.Combine("json","mock-users.json"));
-       Arr mockUsers = JSON.Parse(read);
-         
+        // Read all mock users from the JSON file
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
+        Arr mockUsers = JSON.Parse(read);
         // Get all users from the database
         Arr usersInDb = SQLQuery("SELECT email FROM users");
         Arr emailsInDb = usersInDb.Map(user => user.email);
-        // Only keep the mock users not already in DB
-        Arr mockUsersNotInDb = mockUsers.Filter(mockUser => !emailsInDb.Contains(mockUser.email));
-        //Assert that the CreateMockUsers only return newly created users in the DB
-        
+        // Only keep the mock users not already in db
+        Arr mockUsersNotInDb = mockUsers.Filter(
+            mockUser => !emailsInDb.Contains(mockUser.email)
+        );
+        // Get the result of running the method in our code
         var result = Utils.CreateMockUsers();
-
-        // Assert the same length
-       Assert.Equal(mockUsersNotInDb.Length, result.Length);
-        //Check equivalency for each user
-        for(var i = 0; i < result.Length; i++)
-        {
-           // Assert.Equivalent(mockUsersNotInDb[i], result[i]);
-           Assert.Equal(JSON.Stringify(result[i]), JSON.Stringify(mockUsersNotInDb[i])); 
-        }
+        // Assert that the CreateMockUsers only return
+        // newly created users in the db
+        output.WriteLine($"The test expected that {mockUsersNotInDb.Length} users should be added.");
+        output.WriteLine($"And {result.Length} users were added.");
+        output.WriteLine("The test also asserts that the users added " +
+            "are equivalent (the same) to the expected users!");
+        Assert.Equivalent(mockUsersNotInDb, result);
+        output.WriteLine("The test passed!");
     }
-*/
     [Fact]
-    public void IsPasswordGoodEnoughTest()
-    {
-    string validPassword = "&&&&&&&&&&&&uS1äÖ";
-    string invalidPassword = "solstråle1994";
+public void RemoveBadWordsTest()
+{
+    // Arrangera
+    var text = "This is a test with some bad words like fuck and pussy.";
+    var replacement = "***";
 
-    bool validPasswordPassed = Utils.IsPasswordGoodEnough(validPassword);
-    bool invalidPasswordPassed = Utils.IsPasswordGoodEnough(invalidPassword);
+    // Handling
+    var cleanedText = Utils.RemoveBadWords(text, replacement);
 
-    Assert.True(validPasswordPassed);
-    Assert.False(invalidPasswordPassed);
-    }
+    // Assertera
+    Assert.DoesNotContain("fuck", cleanedText);
+    Assert.DoesNotContain("pussy", cleanedText);
+
+}
 }

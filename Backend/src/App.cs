@@ -24,4 +24,8 @@ foreach(var user in addedUsers)
 }
 */
 
-new UtilsTest().IsPasswordGoodEnoughTest(); 
+//METOD 1
+//new UtilsTest().IsPasswordGoodEnoughTest(); 
+
+//METOD 2
+//new UtilsTest().RemoveBadWordsTest();
