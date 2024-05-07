@@ -5,6 +5,7 @@ using Xunit.Sdk;
 using System.Text.RegularExpressions;
 
 
+
 public class UtilsTest(Xlog output)
 {
 // The following lines are needed to get 
@@ -45,6 +46,19 @@ public class UtilsTest(Xlog output)
             "are equivalent (the same) to the expected users!");
         Assert.Equivalent(mockUsersNotInDb, result);
         output.WriteLine("The test passed!");
+    }
+
+ [Fact]
+    public void IsPasswordGoodEnoughTest()
+    {
+    string validPassword = "&&&&&&&&&&&&uS1äÖ";
+    string invalidPassword = "solstråle1994";
+
+    bool validPasswordPassed = Utils.IsPasswordGoodEnough(validPassword);
+    bool invalidPasswordPassed = Utils.IsPasswordGoodEnough(invalidPassword);
+
+    Assert.True(validPasswordPassed);
+    Assert.False(invalidPasswordPassed);
     }
     [Fact]
 public void RemoveBadWordsTest()

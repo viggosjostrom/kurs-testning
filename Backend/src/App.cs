@@ -14,7 +14,7 @@ Globals = Obj(new
 //Server.Start();
 
 // För att printa users i terminalen
-//new UtilsTest().TestCreateMockUsers();
+//UtilsTest().TestCreateMockUsers();
 
 /*
 var addedUsers = WebApp.Utils.CreateMockUsers();

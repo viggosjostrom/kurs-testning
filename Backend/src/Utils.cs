@@ -42,17 +42,17 @@ public static class Utils
     }
 
     
-    public static Arr RemoveBadWords(string text, string replacement)
+    public static string RemoveBadWords(string text, string replacement)
     {
 
         var badWordsJson = File.ReadAllText(Path.Combine("json", "bad-words.json"));
-        Arr badWords = JSON.Parse(badWordsJson);
+        var badWords = JSON.Parse(badWordsJson) as Arr;
 
         foreach (var word in badWords)
         {
             var regex = new Regex($@"\b{Regex.Escape(word)}\b", RegexOptions.IgnoreCase);
             text = regex.Replace(text, replacement);
         }
-        return Arr(text);
+        return text;
     }
 }
