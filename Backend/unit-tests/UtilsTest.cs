@@ -60,6 +60,7 @@ public class UtilsTest(Xlog output)
     Assert.True(validPasswordPassed);
     Assert.False(invalidPasswordPassed);
     }
+/*
     [Fact]
 public void RemoveBadWordsTest()
 {
@@ -75,4 +76,5 @@ public void RemoveBadWordsTest()
     Assert.DoesNotContain("pussy", cleanedText);
 
 }
+*/
 }

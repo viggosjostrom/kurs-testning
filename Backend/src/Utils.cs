@@ -42,7 +42,7 @@ public static class Utils
     }
 
     
-    public static string RemoveBadWords(string text, string replacement)
+    /*public static string RemoveBadWords(string text, string replacement)
     {
 
         var badWordsJson = File.ReadAllText(Path.Combine("json", "bad-words.json"));
@@ -55,4 +55,5 @@ public static class Utils
         }
         return text;
     }
+    */
 }
