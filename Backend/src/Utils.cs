@@ -47,7 +47,7 @@ public static class Utils
         Arr successFullyWrittenUsers = Arr();
         foreach (var user in mockUsers)
         {
-            // user.password = "12345678";
+            user.password = "12345678";
             var result = SQLQueryOne(
                 @"INSERT INTO users(firstName,lastName,email,password)
                 VALUES($firstName, $lastName, $email, $password)
@@ -66,4 +66,36 @@ public static class Utils
 
     // Now write the two last ones yourself!
     // See: https://sys23m-jensen.lms.nodehill.se/uploads/videos/2021-05-18T15-38-54/sysa-23-presentation-2024-05-02-updated.html#8
+
+    public static Arr RemoveMockUsers()
+    {
+        Arr removedMockUsers = Arr();
+
+        // Query the database to find all users that were created by CreateMockUsers
+        var mockUserIds = SQLQuery("SELECT id FROM users WHERE firstName IN $firstNames AND lastName IN $lastNames AND email IN $emails", new
+        {
+            firstNames = mockUsers.Select(u => Obj(u)["firstName"]),
+            lastNames = mockUsers.Select(u => Obj(u)["lastName"]),
+            emails = mockUsers.Select(u => Obj(u)["email"])
+        });
+
+        // Iterate through the results and remove each mock user from the database
+        foreach (var userId in mockUserIds)
+        {
+            var result = SQLQueryOne(
+                @"DELETE FROM users 
+              WHERE id = $userId
+            ", new { userId });
+
+            // If the user was successfully removed from the database, 
+            // add it to the list of removed mock users
+            if (!result.HasKey("error"))
+            {
+                removedMockUsers.Push(mockUsers.First(u => Obj(u)["id"] == userId));
+            }
+        }
+
+        return removedMockUsers;
+    }
+
 }

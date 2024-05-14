@@ -11,21 +11,4 @@ Globals = Obj(new
     sessionLifeTimeHours = 2
 });
 
-//Server.Start();
-
-// För att printa users i terminalen
-//UtilsTest().TestCreateMockUsers();
-
-/*
-var addedUsers = WebApp.Utils.CreateMockUsers();
-foreach(var user in addedUsers)
-{
-    Log("addedUsers", user);
-}
-*/
-
-//METOD 1
-//new UtilsTest().IsPasswordGoodEnoughTest(); 
-
-//METOD 2
-//new UtilsTest().RemoveBadWordsTest();
+Server.Start();

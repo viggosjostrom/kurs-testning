@@ -75,4 +75,11 @@ public class UtilsTest(Xlog Console)
 
     // Now write the two last ones yourself!
     // See: https://sys23m-jensen.lms.nodehill.se/uploads/videos/2021-05-18T15-38-54/sysa-23-presentation-2024-05-02-updated.html#8
+
+    [Fact]
+    public void TestRemoveMockUsers()
+    {
+
+    }
+
 }
