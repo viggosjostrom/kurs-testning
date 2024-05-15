@@ -69,33 +69,23 @@ public static class Utils
 
     public static Arr RemoveMockUsers()
     {
-        Arr removedMockUsers = Arr();
-
-        // Query the database to find all users that were created by CreateMockUsers
-        var mockUserIds = SQLQuery("SELECT id FROM users WHERE firstName IN $firstNames AND lastName IN $lastNames AND email IN $emails", new
-        {
-            firstNames = mockUsers.Select(u => Obj(u)["firstName"]),
-            lastNames = mockUsers.Select(u => Obj(u)["lastName"]),
-            emails = mockUsers.Select(u => Obj(u)["email"])
-        });
-
-        // Iterate through the results and remove each mock user from the database
-        foreach (var userId in mockUserIds)
+        Arr removedUsers = Arr();
+        foreach (var user in mockUsers)
         {
             var result = SQLQueryOne(
                 @"DELETE FROM users 
-              WHERE id = $userId
-            ", new { userId });
+              WHERE firstName = $firstName AND lastName = $lastName AND email = $email
+              RETURNING firstName, lastName, email", // Returning the deleted user info except password
+                user
+            );
 
-            // If the user was successfully removed from the database, 
-            // add it to the list of removed mock users
-            if (!result.HasKey("error"))
+            // If the result has returned data, it means the user was successfully deleted
+            if (result != null && result.Count > 0)
             {
-                removedMockUsers.Push(mockUsers.First(u => Obj(u)["id"] == userId));
+                removedUsers.Push(result);
             }
         }
-
-        return removedMockUsers;
+        return removedUsers;
     }
 
 }

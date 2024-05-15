@@ -79,7 +79,24 @@ public class UtilsTest(Xlog Console)
     [Fact]
     public void TestRemoveMockUsers()
     {
+        // Act: Call the method to remove mock users
+        var removedUsers = Utils.RemoveMockUsers();
 
+        // Assert: Verify the users have been removed and passwords are not returned
+        foreach (var user in removedUsers)
+        {
+            Assert.False(user.HasKey("password"), "Password should not be returned.");
+
+            // Verify the user no longer exists in the database
+            var result = SQLQueryOne(
+                @"SELECT * FROM users 
+                  WHERE firstName = $firstName AND lastName = $lastName AND email = $email",
+                user
+            );
+
+            Assert.True(result == null || result.Count == 0, "User should be removed from the database.");
+
+        }
     }
 
 }
