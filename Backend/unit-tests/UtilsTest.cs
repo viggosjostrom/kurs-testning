@@ -77,12 +77,45 @@ public class UtilsTest(Xlog Console)
     // See: https://sys23m-jensen.lms.nodehill.se/uploads/videos/2021-05-18T15-38-54/sysa-23-presentation-2024-05-02-updated.html#8
 
     [Fact]
+    public void CountDomainsFromUserEmails_ShouldReturnCorrectCounts()
+    {
+        // Add mock users with specific emails
+        // Add mock users with specific data
+        SQLQueryOne(@"INSERT INTO users (firstName, lastName, email, password) VALUES ('User1', 'Example', 'user1@example.com', '12345678')");
+        SQLQueryOne(@"INSERT INTO users (firstName, lastName, email, password) VALUES ('User2', 'Example', 'user2@example.com', '12345678')");
+        SQLQueryOne(@"INSERT INTO users (firstName, lastName, email, password) VALUES ('User3', 'Test', 'user3@test.com', '12345678')");
+        SQLQueryOne(@"INSERT INTO users (firstName, lastName, email, password) VALUES ('User4', 'Test', 'user4@test.com', '12345678')");
+
+        var result = Utils.CountDomainsFromUserEmails();
+
+        // Output the result for debugging
+        var entries = result.GetEntries(); // Assuming GetEntries() method exists in Obj
+        foreach (var entry in entries)
+        {
+            var key = entry[0]; // First element is the key
+            var value = entry[1]; // Second element is the value
+            Console.WriteLine($"Domain: {key}, Count: {value}");
+        }
+
+        // Assert: Verify the domain counts
+        Assert.True(result.HasKey("example.com"), "example.com domain should be present in the result.");
+        Assert.True(result.HasKey("test.com"), "test.com domain should be present in the result.");
+
+        Assert.IsType<int>(result["example.com"]);
+        Assert.IsType<int>(result["test.com"]);
+
+        Assert.Equal(2, (int)result["example.com"]);
+        Assert.Equal(2, (int)result["test.com"]);
+    }
+
+
+    [Fact]
     public void TestRemoveMockUsers()
     {
-        // Act: Call the method to remove mock users
+        // Call the method to remove mock users
         var removedUsers = Utils.RemoveMockUsers();
 
-        // Assert: Verify the users have been removed and passwords are not returned
+        // Verify the users have been removed and passwords are not returned
         foreach (var user in removedUsers)
         {
             Assert.False(user.HasKey("password"), "Password should not be returned.");
@@ -98,5 +131,6 @@ public class UtilsTest(Xlog Console)
 
         }
     }
+
 
 }

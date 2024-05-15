@@ -88,4 +88,44 @@ public static class Utils
         return removedUsers;
     }
 
+    public static Obj CountDomainsFromUserEmails()
+    {
+        // Fetch all emails from the users table
+        var users = SQLQuery(@"SELECT email FROM users");
+
+        // Dictionary to store domain counts
+        Dictionary<string, int> domainCounts = new Dictionary<string, int>();
+
+        // Regular expression to extract domain from email
+        Regex domainRegex = new Regex(@"@(?<domain>[\w.-]+)$");
+
+        foreach (var user in users)
+        {
+            string email = user["email"];
+            Match match = domainRegex.Match(email);
+
+            if (match.Success)
+            {
+                string domain = match.Groups["domain"].Value;
+
+                if (domainCounts.ContainsKey(domain))
+                {
+                    domainCounts[domain]++;
+                }
+                else
+                {
+                    domainCounts[domain] = 1;
+                }
+            }
+        }
+
+        // Convert dictionary to Obj
+        Obj result = Obj();
+        foreach (var domainCount in domainCounts)
+        {
+            result[domainCount.Key] = domainCount.Value;
+        }
+
+        return result;
+    }
 }
