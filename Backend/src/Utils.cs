@@ -88,6 +88,7 @@ public static class Utils
         return removedUsers;
     }
 
+
     public static Obj CountDomainsFromUserEmails()
     {
         // Fetch all emails from the users table
@@ -128,4 +129,5 @@ public static class Utils
 
         return result;
     }
+    
 }

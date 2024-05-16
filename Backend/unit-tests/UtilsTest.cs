@@ -107,7 +107,6 @@ public class UtilsTest(Xlog Console)
         Assert.Equal(2, (int)result["test.com"]);
     }
 
-
     [Fact]
     public void TestRemoveMockUsers()
     {
@@ -130,6 +129,5 @@ public class UtilsTest(Xlog Console)
 
         }
     }
-
 
 }
