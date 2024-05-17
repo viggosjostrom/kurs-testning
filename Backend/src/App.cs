@@ -6,7 +6,7 @@ Globals = Obj(new
     aclOn = true,
     isSpa = true,
     port = 3001,
-    serverName = "Viggo's Minimal API Server",
+    serverName = "Viggos Minimal API Server",
     frontendPath = FilePath("..", "Frontend"),
     sessionLifeTimeHours = 2
 });
