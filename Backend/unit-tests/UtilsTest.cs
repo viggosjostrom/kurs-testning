@@ -87,7 +87,6 @@ public class UtilsTest(Xlog Console)
 
         var result = Utils.CountDomainsFromUserEmails();
 
-        // Output the result for debugging
         var entries = result.GetEntries();
         foreach (var entry in entries)
         {
@@ -96,7 +95,6 @@ public class UtilsTest(Xlog Console)
             Console.WriteLine($"Domain: {key}, Count: {value}");
         }
 
-        // Verify the domain counts
         Assert.True(result.HasKey("example.com"), "example.com domain should be present in the result.");
         Assert.True(result.HasKey("test.com"), "test.com domain should be present in the result.");
 
